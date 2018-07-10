@@ -13,9 +13,9 @@ from googleapiclient.errors import HttpError
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 Session = sessionmaker(bind=db)
 session = Session()
-db = SQLAlchemy(app)
 import models
 
 
