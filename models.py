@@ -3,10 +3,11 @@ from sqlalchemy.dialects.postgresql import JSON
 
 
 class Result(db.Model):
-    __tablename__ = 'results'
+    __tablename__ = 'formulas'
 
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String())
+    title = db.Column(db.String())
+    sheet_id = db.Column(db.String())
     result_all = db.Column(JSON)
     result_no_stop_words = db.Column(JSON)
 

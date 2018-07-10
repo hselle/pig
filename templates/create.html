@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+Enter a new sheet id
+{% endblock %}
+
+{% block content %}
+<form method="post">
+  <label for="title">Product #</label>
+  <input name="title" id="title" value="{{ request.form['title'] }}" required>
+  <label for="body">Sheet_id</label>
+  <textarea name="sheet_id" id="sheet_id" value="{{ request.form['sheet_id'] }}"></textarea>
+  <input type="submit" value="Save">
+</form>
+{% endblock %}
