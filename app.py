@@ -75,3 +75,6 @@ def create():
             session.flush
             return redirect(url_for('index'))
     return render_template('create.html')
+
+if __name__ == '__main__':
+    app.run()
