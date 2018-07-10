@@ -12,11 +12,13 @@ from googleapiclient.errors import HttpError
 
 app = Flask(__name__)
 
+
+
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Session = sessionmaker(bind=db)
 session = Session()
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 import models
 
 
@@ -46,7 +48,6 @@ def index():
         except HttpError:
             abort(404, "sheet id is invalid".format(id))
 
-    db = SQLAlchemy(app)
     formulas = db.engine.execute(
         'SELECT title, sheet_id'
         ' FROM formulas f'
