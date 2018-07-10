@@ -21,6 +21,8 @@ Session = sessionmaker(bind=db)
 session = Session()
 import models
 
+def get_db():
+    return SQLAlchemy(app)
 
 
 @app.route('/', methods=('GET', "POST"))
@@ -47,12 +49,11 @@ def index():
             return send_file("static/Nutrition_Label_Output.docx", attachment_filename="Nutrition_Label.docx")
         except HttpError:
             abort(404, "sheet id is invalid".format(id))
-
+    db = get_db()
     formulas = db.engine.execute(
         'SELECT title, sheet_id'
         ' FROM formulas f'
     ).fetchall()
-    print('FORMULA::::' + str(formulas))
     return render_template('recipe-list.html', formulas=formulas)
 
 @app.route('/create', methods=('GET', "POST"))
