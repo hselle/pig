@@ -45,7 +45,7 @@ def formulas():
         'SELECT title, sheet_id'
         ' FROM formulas f'
     ).fetchall()
-    return render_template('recipe-list.html', formulas=formulas)
+    return render_template('formulas.html', formulas=formulas)
 @app.route('/formulas/create', methods=('GET', "POST"))
 def create():
     if request.method == 'POST':
@@ -62,7 +62,6 @@ def create():
             flash(error)
         else:
             try:
-                print("Creating:" + r_title + '|' + r_sheet_id)
                 result = Result(
                     title=r_title,
                     sheet_id=r_sheet_id
@@ -71,7 +70,9 @@ def create():
                 db.session.commit()
                 return redirect(url_for('formulas'))
             except:
-                print('fcuck')
+                error = "Problem adding to the database"
+        if error is not '':
+            flash(error)
     return render_template('create.html')
 if __name__ == '__main__':
     app.run()

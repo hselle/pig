@@ -4,10 +4,12 @@
 <nav>
   <h1>Unreal Web App</h1>
 </nav>
+<section class="header">
+  <h2>
+    {% block header %}{% endblock %}
+  </h2>
+</section>
 <section class="content">
-  <header>
-    <h2>Unreal Toolbelt</h2>
-  </header>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}

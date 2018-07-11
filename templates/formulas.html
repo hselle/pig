@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block header %}Formulas{% endblock %}
+
 {% block content %}
   <u1>
     <li><a href="{{ url_for('create')}}">Add Formula</a>
@@ -9,7 +11,6 @@
       <form method="post">
         <input name="title" id="title" type="submit" value="{{ formula['title'] }}">
       </form>
-      
       </a>
     </article>
   {% endfor %}
