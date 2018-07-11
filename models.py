@@ -8,13 +8,11 @@ class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String())
     sheet_id = db.Column(db.String())
-    result_all = db.Column(JSON)
-    result_no_stop_words = db.Column(JSON)
 
-    def __init__(self, url, result_all, result_no_stop_words):
-        self.url = url
-        self.result_all = result_all
-        self.result_no_stop_words = result_no_stop_words
+
+    def __init__(self, title, sheet_id):
+        self.title = title
+        self.sheet_id = sheet_id
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
