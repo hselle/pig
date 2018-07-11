@@ -3,13 +3,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
   <h1>Unreal Web App</h1>
-  <u1>
-    <li><a href="{{ url_for('create')}}">Add Formula</a>
-  </u1>
 </nav>
 <section class="content">
   <header>
-    <h1>Formulas</h1>
+    <h2>Unreal Toolbelt</h2>
   </header>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
