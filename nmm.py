@@ -52,7 +52,7 @@ def push_to_doc(template_filename, data, _ingredients):
 
         ingredients = _ingredients
     )
-    document.write("../Nutrition_Label_Output.docx")
+    document.write("static/Nutrition_Label_Output.docx")
 
 def process(calories_dict, nutrient_dict, vitamins_and_minerals_dict):
     '''
