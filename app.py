@@ -38,11 +38,8 @@ def formulas():
 
         if _sheet_id is None:
             abort(404, "formula {0} doesn't exist.".format(id))
-        try:
-            nmm.make(_sheet_id)
-            return send_file("static/Nutrition_Label_Output.docx", attachment_filename="Nutrition_Label.docx")
-        except:
-            flash("Problem making label")
+        nmm.make(_sheet_id)
+        return send_file("static/Nutrition_Label_Output.docx", attachment_filename="Nutrition_Label.docx")
     formulas = db.session.execute(
         'SELECT title, sheet_id'
         ' FROM formulas f'

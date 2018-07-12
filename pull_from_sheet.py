@@ -25,7 +25,7 @@ def pull_from_sheet(sheet_id):
         '''
         Pulls from the table and catagorizes the data in dictrionaries
         '''
-        RANGE_NAME = 'E15:S15'
+        RANGE_NAME = 'F15:T15'
         result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
         values = result.get("values")[0]

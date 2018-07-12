@@ -24,7 +24,7 @@ def sheet_check(sheet_id):
         values = result.get("values")[0]
 
         return ''
-    except HttpError:
+    except:
         return "Could not access sheet with sheet id: " + sheet_id + "\n"
 
 def title_check(title):
