@@ -23,7 +23,7 @@ def sheet_check(sheet_id):
                                                  range=RANGE_NAME).execute()
         values = result.get("values")[0]
 
-        return None
+        return ''
     except HttpError:
         return "Could not access sheet with sheet id: " + sheet_id + "\n"
 
@@ -41,4 +41,4 @@ def title_check(title):
     for t in titles:
         if t[0]==title:
             return "Title already in use.\n"
-    return None
+    return ''
