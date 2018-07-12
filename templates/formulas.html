@@ -5,11 +5,12 @@
 {% block content %}
   <u1>
     <li><a href="{{ url_for('create')}}">Add Formula</a>
-    <li>OLD FORMAT DEPRECATED, USE "NEW FORMAT"</li>
+    <li><a href="{{ url_for('delete')}}">Delete Formula</a>
   </u1>
   {% for formula in formulas %}
     <article class=formula>
       <form method="post">
+        <p>Download:</p>
         <input name="title" id="title" type="submit" value="{{ formula['title'] }}">
       </form>
       </a>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+Delete an entry
+{% endblock %}
+
+{% block content %}
+  {% for formula in formulas %}
+    <article class=formula>
+      <form method="post">
+        <p>Delete:</p>
+        <input name="delete" id="delete" type="submit" value="{{ formula['title'] }}">
+      </form>
+      </a>
+    </article>
+  {% endfor %}
+{% endblock %}

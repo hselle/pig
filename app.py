@@ -25,8 +25,21 @@ def index():
 @app.route('/formulas', methods=('GET', 'POST'))
 def formulas():
     if request.method == 'POST':
+        # if request.form['delete'] is not Null:
+        #     print("Deleting....\n")
+        #     title = request.form['delete']
+        #     print("Title:..." + title)
+        #     db.session.execute(
+        #     'DELETE FROM formulas'
+        #     ' WHERE title =:param',
+        #     {"param":title}
+        #     )
+        #     db.session.commit()
+        #     return redirect(url_for('formulas'))
+        # else:
         title = request.form['title']
         error = None
+
         sheet_id = db.session.execute(
             'SELECT sheet_id'
             ' FROM formulas d'
@@ -73,5 +86,23 @@ def create():
                 flash("Problem adding to the database")
 
     return render_template('create.html')
+@app.route('/formulas/delete', methods=('GET', "POST"))
+def delete():
+    if request.method == 'POST':
+        title = request.form['delete']
+        print("Deleting....\n")
+        print("Title:..." + title)
+        db.session.execute(
+            'DELETE FROM formulas'
+            ' WHERE title =:param',
+            {"param":title}
+        )
+        db.session.commit()
+        return redirect(url_for('formulas'))
+    formulas = db.session.execute(
+        'SELECT title, sheet_id'
+        ' FROM formulas f'
+    ).fetchall()
+    return render_template('delete.html', formulas=formulas)
 if __name__ == '__main__':
     app.run()
