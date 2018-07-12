@@ -25,7 +25,8 @@ def sheet_check(sheet_id):
 
         return None
     except HttpError:
-        return "Could not access sheet id.\n"
+        return "Could not access sheet with sheet id: " + sheet_id + "\n")
+
 def title_check(title):
     from flask_sqlalchemy import SQLAlchemy
     from sqlalchemy import engine

@@ -38,14 +38,17 @@ def formulas():
 
         if _sheet_id is None:
             abort(404, "formula {0} doesn't exist.".format(id))
-        nmm.make(_sheet_id)
-        return send_file("static/Nutrition_Label_Output.docx", attachment_filename="Nutrition_Label.docx")
-
+        try:
+            nmm.make(_sheet_id)
+            return send_file("static/Nutrition_Label_Output.docx", attachment_filename="Nutrition_Label.docx")
+        except:
+            flash("Problem making label")
     formulas = db.session.execute(
         'SELECT title, sheet_id'
         ' FROM formulas f'
     ).fetchall()
     return render_template('formulas.html', formulas=formulas)
+
 @app.route('/formulas/create', methods=('GET', "POST"))
 def create():
     if request.method == 'POST':
@@ -57,7 +60,7 @@ def create():
         error += helper.sheet_check(r_sheet_id)
 
         if not r_title:
-            error = 'Please enter product #'
+            flash('Please enter product #')
         if error is not '':
             flash(error)
         else:
@@ -70,9 +73,8 @@ def create():
                 db.session.commit()
                 return redirect(url_for('formulas'))
             except:
-                error = "Problem adding to the database"
-        if error is not '':
-            flash(error)
+                flash("Problem adding to the database")
+
     return render_template('create.html')
 if __name__ == '__main__':
     app.run()

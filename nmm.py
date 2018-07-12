@@ -57,7 +57,7 @@ def push_to_doc(template_filename, data, _ingredients):
 def process(calories_dict, nutrient_dict, vitamins_and_minerals_dict):
     '''
     Formats the data given by pull_from_sheet.py and combines it into one big
-    dictionary, which is then returned.
+    dictionary, which is then returne d.
     '''
     def format_whole_values_data(data):
         '''
