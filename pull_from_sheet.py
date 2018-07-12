@@ -23,7 +23,7 @@ def pull_from_sheet(sheet_id):
 
     def get_nutrition_facts():
         '''
-        Pulls from the table and catagorizes the data in dictrionaries
+        Pulls from the table and catagorizes the data in dictrionaries  
         '''
         RANGE_NAME = 'F15:T15'
         result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
@@ -66,7 +66,7 @@ def pull_from_sheet(sheet_id):
         Pulls from the table and returns a tuple (components, ingredients)
         '''
         def get_components():
-            RANGE_NAME = 'C5:D10'
+            RANGE_NAME = 'B5:C10'
             result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
             components = result.get("values")
@@ -82,7 +82,7 @@ def pull_from_sheet(sheet_id):
                 ingredients_total.append(ingredients_one_component)
             return ingredients_total
 
-        ingredient_ranges = ('B23:D33', 'B45:D45')
+        ingredient_ranges = ('B23:E33', 'B45:E45')
         components = get_components()
         ingredients = get_each_ingredient(ingredient_ranges)
 

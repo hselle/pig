@@ -103,9 +103,7 @@ def build_ingredient_list(components, ingredients_in):
             if ingredient[0] is not '':
                 ingredient[0] = float(ingredient[0])
                 ingredient[0] = ingredient[0]*component_factors[component_counter]/100
-            else:
-                ingredient[0] = 0.0
-            ingredients_out.append(ingredient)
+                ingredients_out.append(ingredient)
         component_counter = component_counter + 1
 
     def getKey(item):
@@ -115,7 +113,7 @@ def build_ingredient_list(components, ingredients_in):
     ingredient_names = ''
 
     for ingredient in ingredients_sorted:
-        ingredient_names += (ingredient[2] + ', ')
+        ingredient_names += (ingredient[3] + ', ')
 
     return ingredient_names[:-2]
 
