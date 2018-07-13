@@ -4,7 +4,7 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 from googleapiclient.errors import HttpError
 
-def pull_from_sheet(sheet_id):
+def pull_from_sheet(sheet_id, tab_name):
     '''
     This pulls the 15th row of Kris's google Sheet, which contains rounded
     values for nutrition facts.
@@ -20,12 +20,11 @@ def pull_from_sheet(sheet_id):
     # Call the Sheets API
     SPREADSHEET_ID = sheet_id
 
-
-    def get_nutrition_facts():
+    def get_nutrition_facts(tab_name):
         '''
-        Pulls from the table and catagorizes the data in dictrionaries  
+        Pulls from the table and catagorizes the data in dictrionaries
         '''
-        RANGE_NAME = 'F15:T15'
+        RANGE_NAME = tab_name + '!F15:T15'
         result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
         values = result.get("values")[0]
@@ -61,33 +60,33 @@ def pull_from_sheet(sheet_id):
         }
         return calories_dict, nutrient_dict, vitamins_and_minerals_dict
 
-    def get_ingredients():
+    def get_ingredients(tab_name):
         '''
         Pulls from the table and returns a tuple (components, ingredients)
         '''
-        def get_components():
-            RANGE_NAME = 'B5:C10'
+        def get_components(tab_name):
+            RANGE_NAME = tab_name + '!B5:C10'
             result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
             components = result.get("values")
             return components
 
-        def get_each_ingredient(ranges):
+        def get_each_ingredient(ranges, tab_name):
             ingredients_total = list()
             for range in ranges:
-                RANGE_NAME = range
+                RANGE_NAME = tab_name + range
                 result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
                 ingredients_one_component = result.get("values")
                 ingredients_total.append(ingredients_one_component)
             return ingredients_total
 
-        ingredient_ranges = ('B23:E33', 'B45:E45')
-        components = get_components()
-        ingredients = get_each_ingredient(ingredient_ranges)
+        ingredient_ranges = ('!B23:E33', '!B45:E45')
+        components = get_components(tab_name)
+        ingredients = get_each_ingredient(ingredient_ranges, tab_name)
 
         return components, ingredients
 
-    components, ingredients = get_ingredients()
-    calories_dict, nutrient_dict, vitamins_and_minerals_dict = get_nutrition_facts()
+    components, ingredients = get_ingredients(tab_name)
+    calories_dict, nutrient_dict, vitamins_and_minerals_dict = get_nutrition_facts(tab_name)
     return calories_dict, nutrient_dict, vitamins_and_minerals_dict, components, ingredients

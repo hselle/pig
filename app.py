@@ -1,6 +1,7 @@
 from flask import (
     Flask, request, render_template, redirect, url_for, send_file, flash
 )
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import engine
 import os
@@ -25,18 +26,6 @@ def index():
 @app.route('/formulas', methods=('GET', 'POST'))
 def formulas():
     if request.method == 'POST':
-        # if request.form['delete'] is not Null:
-        #     print("Deleting....\n")
-        #     title = request.form['delete']
-        #     print("Title:..." + title)
-        #     db.session.execute(
-        #     'DELETE FROM formulas'
-        #     ' WHERE title =:param',
-        #     {"param":title}
-        #     )
-        #     db.session.commit()
-        #     return redirect(url_for('formulas'))
-        # else:
         title = request.form['title']
         error = None
 
@@ -48,11 +37,22 @@ def formulas():
         ).fetchone()
 
         _sheet_id = sheet_id["sheet_id"]
+        tab_name = "Test1"
 
         if _sheet_id is None:
             abort(404, "formula {0} doesn't exist.".format(id))
-        nmm.make(_sheet_id)
-        return send_file("static/Nutrition_Label_Output.docx", attachment_filename="Nutrition_Label.docx")
+
+        nmm.make(_sheet_id, tab_name)
+
+        now = datetime.datetime.now()
+        date = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
+        file_name = title + "_" + tab_name + "_" + date + ".docx"
+
+        return send_file(
+            "static/Nutrition_Label_Output.docx", as_attachment = True,
+            attachment_filename= file_name
+        )
+
     formulas = db.session.execute(
         'SELECT title, sheet_id'
         ' FROM formulas f'
@@ -86,6 +86,7 @@ def create():
                 flash("Problem adding to the database")
 
     return render_template('create.html')
+
 @app.route('/formulas/delete', methods=('GET', "POST"))
 def delete():
     if request.method == 'POST':
@@ -104,5 +105,6 @@ def delete():
         ' FROM formulas f'
     ).fetchall()
     return render_template('delete.html', formulas=formulas)
+
 if __name__ == '__main__':
     app.run()
