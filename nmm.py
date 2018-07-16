@@ -1,6 +1,6 @@
 import mailmerge
-from datetime import date
 import pull_from_sheet
+import datetime
 
 
 '''
@@ -20,7 +20,7 @@ def calculate_dv(data):
     }
     return dv_dict
 
-def push_to_doc(template_filename, data, _ingredients, tab_name):
+def push_to_doc(template_filename, data, _ingredients, title, tab_name):
     '''
     This places formatted values into the relevant merge fields in
     Nutrition_Label_Template.docx, and writes to a new file called
@@ -52,7 +52,9 @@ def push_to_doc(template_filename, data, _ingredients, tab_name):
 
         ingredients = _ingredients
     )
-    document.write("static/Nutrition_Label_Output_" + tab_name + ".docx")
+    now = datetime.datetime.now()
+    timestamp = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
+    document.write("static/" + title + "_" + tab_name + "_"+ timestamp + ".docx")
 
 def process(calories_dict, nutrient_dict, vitamins_and_minerals_dict):
     '''
@@ -117,7 +119,7 @@ def build_ingredient_list(components, ingredients_in):
 
     return ingredient_names[:-2]
 
-def make(sheet_id, tab):
+def make(title, sheet_id, tab):
     '''
     Finds all the tabs in a google spreadsheet with spreadsheetid = sheet_id.
     For each tab, generates a calls each method in nmm.py to generate
@@ -128,8 +130,12 @@ def make(sheet_id, tab):
 
     calories_dict, nutrient_dict, vitamins_and_minerals_dict, components, ingredients = pull_from_sheet.pull_from_sheet(sheet_id, tab)
     processed_data = process(calories_dict, nutrient_dict, vitamins_and_minerals_dict)
-    push_to_doc(template_filename, processed_data, build_ingredient_list(components, ingredients), tab)
-    print("Done. \nWrote Label to \"Nutrition_Label_Output_" + tab + ".docx\"")
+    push_to_doc(template_filename, processed_data, build_ingredient_list(components, ingredients), title, tab)
+
+    now = datetime.datetime.now()
+    timestamp = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
+
+    print("Done. \nWrote Label to \"" + title + "_" + tab + "_" + timestamp + ".docx\"")
 
 if __name__ == '__main__':
     make('1jYoq2hEwMltHcCb9RFpCMjBSIGIQlfCyQAHCdNlJhrw')

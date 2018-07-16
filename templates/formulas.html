@@ -12,13 +12,13 @@
     <article class=formula>
       <div class="dropdown">
           <button class="dropbtn">{{ formula[0][0] }}</button>
-            <div class="dropdown-content">
-              {% for tab in formula[1] %}
-                <form>
-                  <a href="/formulas/download?title={{ formula[0][0] }}&tab={{ tab }}">{{ tab }}</a>
-                </form>
-              {% endfor %}
-            </div>
+          <div class="dropdown-content">
+            {% for tab in formula[1] %}
+              <form>
+                <a href="/formulas/download?title={{ formula[0][0] }}&tab={{ tab }}">{{ tab }}</a>
+              </form>
+            {% endfor %}
+          </div>
       </div>
     </article>
   {% endfor %}

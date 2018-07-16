@@ -59,16 +59,19 @@ def download():
     if _sheet_id is None:
         abort(404, "formula {0} doesn't exist.".format(id))
 
-    nmm.make(_sheet_id, tab_name)
+    nmm.make(title, _sheet_id, tab_name)
 
     now = datetime.datetime.now()
     date = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
     file_name = title + "_" + tab_name + "_" + date + ".docx"
 
+    print(file_name)
+
     return send_file(
-        "static/Nutrition_Label_Output.docx", as_attachment = True,
-        attachment_filename= file_name
+        "static/" + file_name, as_attachment = True,
+        attachment_filename = file_name
     )
+
 @app.route('/formulas/create', methods=('GET', "POST"))
 def create():
     if request.method == 'POST':

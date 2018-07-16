@@ -44,6 +44,7 @@ def pull_from_sheet(sheet_id, tab_name):
         Pulls from the table and catagorizes the data in dictrionaries
         '''
         RANGE_NAME = tab_name + '!F15:T15'
+        print(RANGE_NAME)
         result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
         values = result.get("values")[0]
@@ -52,6 +53,7 @@ def pull_from_sheet(sheet_id, tab_name):
             'calories' : values[0],
             'calories_from_fat' : values[1]
         }
+        print(str(calories_dict))
 
         nutrient_dict = {
             'sugar' : float(values[2]),
