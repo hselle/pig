@@ -24,12 +24,25 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content textarea { min-height: 12em; resize: vertical; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
+
+.navbar .navlink {
+    background-color: #1387B9;
+    color: black;
+    padding: 24px;
+    font-size: 24px;
+    border-radius: 24px;
+    border: none;
+}
+.navbar a{
+  color: black;
+}
 /* Dropdown Button */
 .dropbtn {
     background-color: #4CAF50;
     color: white;
     padding: 16px;
     font-size: 16px;
+    border-radius: 16px;
     border: none;
 }
 

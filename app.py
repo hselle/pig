@@ -23,39 +23,8 @@ from models import Result
 def index():
     return render_template('home.html')
 
-@app.route('/formulas', methods=('GET', 'POST'))
+@app.route('/formulas')
 def formulas():
-    if request.method == 'POST':
-        print("Getting query")
-        title = request.args.get('title')
-        tab_name = request.args.get('tab')
-        print("Title:::::" + title)
-        error = None
-        print("got query\n")
-        print(title, tab_name)
-
-        sheet_id = db.session.execute(
-            'SELECT sheet_id'
-            ' FROM formulas d'
-            ' WHERE d.title =:param',
-            {"param":title}
-        ).fetchone()
-
-        _sheet_id = sheet_id["sheet_id"]
-
-        if _sheet_id is None:
-            abort(404, "formula {0} doesn't exist.".format(id))
-
-        nmm.make(_sheet_id, tab_name)
-
-        now = datetime.datetime.now()
-        date = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
-        file_name = title + "_" + tab_name + "_" + date + ".docx"
-
-        return send_file(
-            "static/Nutrition_Label_Output.docx", as_attachment = True,
-            attachment_filename= file_name
-        )
 
     formulas = db.session.execute(
         'SELECT title, sheet_id'
@@ -73,12 +42,9 @@ def formulas():
 
 @app.route('/formulas/download')
 def download():
-    print("Getting query")
     title = request.args.get('title')
     tab_name = request.args.get('tab')
-    print("Title:::::" + title)
     error = None
-    print("got query\n")
     print(title, tab_name)
 
     sheet_id = db.session.execute(

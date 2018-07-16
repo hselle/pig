@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block header %}Formulas{% endblock %}
+{% block header %}Nutrition Label Generation Tool{% endblock %}
 
 {% block content %}
-  <u1>
-    <li><a href="{{ url_for('create')}}">Add Formula</a>
-    <li><a href="{{ url_for('delete')}}">Delete Formula</a>
-  </u1>
+  <div class="navbar">
+    <a href="{{ url_for('create')}}"><input type="button" value="Add Formula" class="navlink"></a>
+    <a href="{{ url_for('delete')}}"><input type="button" value="Delete Formula" class="navlink"></a>
+  </div>
+  <p>Download:</p>
   {% for formula in formulas %}
     <article class=formula>
-      <p>Download:</p>
       <div class="dropdown">
           <button class="dropbtn">{{ formula[0][0] }}</button>
             <div class="dropdown-content">
