@@ -117,14 +117,19 @@ def build_ingredient_list(components, ingredients_in):
 
     return ingredient_names[:-2]
 
-def make(sheet_id, tab_name):
-    print("\nmaking......................\n" + str(sheet_id) + str(tab_name))
+def make(sheet_id, tab):
+    '''
+    Finds all the tabs in a google spreadsheet with spreadsheetid = sheet_id.
+    For each tab, generates a calls each method in nmm.py to generate
+    a nutrition label.
+    '''
+    print("\nmaking......................\n" + str(sheet_id))
     template_filename = 'static/Nutrition_Label_Template_Dev.docx'
-    calories_dict, nutrient_dict, vitamins_and_minerals_dict, components, ingredients = pull_from_sheet.pull_from_sheet(sheet_id, tab_name)
+
+    calories_dict, nutrient_dict, vitamins_and_minerals_dict, components, ingredients = pull_from_sheet.pull_from_sheet(sheet_id, tab)
     processed_data = process(calories_dict, nutrient_dict, vitamins_and_minerals_dict)
-    push_to_doc(template_filename, processed_data, build_ingredient_list(components, ingredients), tab_name)
-    print("Done. \nWrote Label to \"Nutrition_Label_Output_" + tab_name + ".docx\"")
+    push_to_doc(template_filename, processed_data, build_ingredient_list(components, ingredients), tab)
+    print("Done. \nWrote Label to \"Nutrition_Label_Output_" + tab + ".docx\"")
 
 if __name__ == '__main__':
-    make('1jYoq2hEwMltHcCb9RFpCMjBSIGIQlfCyQAHCdNlJhrw', "Test1")
-    make('1jYoq2hEwMltHcCb9RFpCMjBSIGIQlfCyQAHCdNlJhrw', "Test2")
+    make('1jYoq2hEwMltHcCb9RFpCMjBSIGIQlfCyQAHCdNlJhrw')

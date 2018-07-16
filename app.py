@@ -27,6 +27,8 @@ def index():
 def formulas():
     if request.method == 'POST':
         title = request.form['title']
+        #tab_name = request.form['tab_name']
+        print("Title:::::" + title)
         error = None
 
         sheet_id = db.session.execute(
@@ -37,7 +39,8 @@ def formulas():
         ).fetchone()
 
         _sheet_id = sheet_id["sheet_id"]
-        tab_name = "Test1"
+
+
 
         if _sheet_id is None:
             abort(404, "formula {0} doesn't exist.".format(id))
@@ -57,7 +60,18 @@ def formulas():
         'SELECT title, sheet_id'
         ' FROM formulas f'
     ).fetchall()
-    return render_template('formulas.html', formulas=formulas)
+    print(formulas)
+    list_of_tabs = list()
+    for formula in formulas:
+        sheet_id = formula[1]
+        tabs = pull_from_sheet.get_tabs(sheet_id)
+        print("Sheet_id: " + sheet_id)
+        print("Tabs: " + str(tabs))
+        list_of_tabs.append(tabs)
+
+    print("Tabs:   " + str(list_of_tabs))
+
+    return render_template('formulas.html', formulas=formulas, list_of_tabs=list_of_tabs)
 
 @app.route('/formulas/create', methods=('GET', "POST"))
 def create():

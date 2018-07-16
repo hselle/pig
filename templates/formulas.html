@@ -11,9 +11,17 @@
     <article class=formula>
       <form method="post">
         <p>Download:</p>
-        <input name="title" id="title" type="submit" value="{{ formula['title'] }}">
+        <p>{{ formula['title'] }}</p>
+        {% for tabs in list_of_tabs %}
+          {% for tab in tabs %}
+            <article class=tab>
+              <input name="title" id="title" type="submit" value="{{ formula['title'] }}, {{tab}}">
+            </article>
+          {% endfor %}
+        {% endfor %}
       </form>
       </a>
     </article>
   {% endfor %}
+
 {% endblock %}

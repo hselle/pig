@@ -4,6 +4,25 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 from googleapiclient.errors import HttpError
 
+def get_tabs(sheet_id):
+    SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+    store = file.Storage('static/credentials.json')
+    creds = store.get()
+    if not creds or creds.invalid:
+        flow = client.flow_from_clientsecrets('static/client_secret.json', SCOPES)
+        creds = tools.run_flow(flow, store)
+    service = build('sheets', 'v4', http=creds.authorize(Http()))
+    # Call the Sheets API
+    SPREADSHEET_ID = sheet_id
+
+    sheet_metadata = service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+    sheets = sheet_metadata.get('sheets', '')
+    tabs = list()
+    for sheet in sheets:
+        title = sheet.get("properties", {}).get("title", "Sheet1")
+        tabs.append(title)
+    return tabs
+
 def pull_from_sheet(sheet_id, tab_name):
     '''
     This pulls the 15th row of Kris's google Sheet, which contains rounded
@@ -16,9 +35,9 @@ def pull_from_sheet(sheet_id, tab_name):
         flow = client.flow_from_clientsecrets('static/client_secret.json', SCOPES)
         creds = tools.run_flow(flow, store)
     service = build('sheets', 'v4', http=creds.authorize(Http()))
-
     # Call the Sheets API
     SPREADSHEET_ID = sheet_id
+
 
     def get_nutrition_facts(tab_name):
         '''
