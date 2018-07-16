@@ -26,10 +26,13 @@ def index():
 @app.route('/formulas', methods=('GET', 'POST'))
 def formulas():
     if request.method == 'POST':
-        title = request.form['title']
-        #tab_name = request.form['tab_name']
+        print("Getting query")
+        title = request.args.get('title')
+        tab_name = request.args.get('tab')
         print("Title:::::" + title)
         error = None
+        print("got query\n")
+        print(title, tab_name)
 
         sheet_id = db.session.execute(
             'SELECT sheet_id'
@@ -39,8 +42,6 @@ def formulas():
         ).fetchone()
 
         _sheet_id = sheet_id["sheet_id"]
-
-
 
         if _sheet_id is None:
             abort(404, "formula {0} doesn't exist.".format(id))
@@ -60,19 +61,48 @@ def formulas():
         'SELECT title, sheet_id'
         ' FROM formulas f'
     ).fetchall()
-    print(formulas)
-    list_of_tabs = list()
+    formula_tabs = list()
     for formula in formulas:
         sheet_id = formula[1]
         tabs = pull_from_sheet.get_tabs(sheet_id)
-        print("Sheet_id: " + sheet_id)
-        print("Tabs: " + str(tabs))
-        list_of_tabs.append(tabs)
+        formula_tabs.append((formula, tabs))
 
-    print("Tabs:   " + str(list_of_tabs))
+    print("Tabs:   " + str(formula_tabs))
 
-    return render_template('formulas.html', formulas=formulas, list_of_tabs=list_of_tabs)
+    return render_template('formulas.html', formulas=formula_tabs)
 
+@app.route('/formulas/download')
+def download():
+    print("Getting query")
+    title = request.args.get('title')
+    tab_name = request.args.get('tab')
+    print("Title:::::" + title)
+    error = None
+    print("got query\n")
+    print(title, tab_name)
+
+    sheet_id = db.session.execute(
+        'SELECT sheet_id'
+        ' FROM formulas d'
+        ' WHERE d.title =:param',
+        {"param":title}
+    ).fetchone()
+
+    _sheet_id = sheet_id["sheet_id"]
+
+    if _sheet_id is None:
+        abort(404, "formula {0} doesn't exist.".format(id))
+
+    nmm.make(_sheet_id, tab_name)
+
+    now = datetime.datetime.now()
+    date = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
+    file_name = title + "_" + tab_name + "_" + date + ".docx"
+
+    return send_file(
+        "static/Nutrition_Label_Output.docx", as_attachment = True,
+        attachment_filename= file_name
+    )
 @app.route('/formulas/create', methods=('GET', "POST"))
 def create():
     if request.method == 'POST':
