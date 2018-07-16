@@ -5,13 +5,12 @@ Delete an entry
 {% endblock %}
 
 {% block content %}
+  <p>Delete:</p>
   {% for formula in formulas %}
     <article class=formula>
       <form method="post">
-        <p>Delete:</p>
-        <input name="delete" id="delete" type="submit" value="{{ formula['title'] }}">
+        <input name="delete" id="delete" type="submit" value="{{ formula['title'] }}" class="deletebtn">
       </form>
-      </a>
     </article>
   {% endfor %}
 {% endblock %}
