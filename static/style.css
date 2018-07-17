@@ -10,8 +10,8 @@ nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
 nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content { padding: 0 1rem 1rem; }
 .content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; }
-.content > header h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
-.flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
+.content > header h1 { flex: auto; font-family: serif; margin: 1rem 0 0.25rem 0; }
+.flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; border-radius: 16px; }
 .post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
 .post > header > div:first-of-type { flex: auto; }
 .post > header h1 { font-size: 1.5em; margin-bottom: 0; }
@@ -20,22 +20,33 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content:last-child { margin-bottom: 0; }
 .content form { margin: 1em 0; display: flex; flex-direction: column; }
 .content label { font-weight: bold; margin-bottom: 0.5em; }
-.content input, .content textarea { margin-bottom: 1em; }
+.content input, .content textarea { margin-bottom: 1em; border-radius: 16px; }
 .content textarea { min-height: 12em; resize: vertical; }
 input.danger { color: #cc2f2e; }
-input[type=submit] { align-self: start; min-width: 10em; }
+input[type=submit] { align-self: start; min-width: 10em; color: #079C00; border-radius: 16px; }
 
+.head {
+
+}
+
+.formlinks {
+    display: inline-block; margin-right: 15px;
+}
 .navbar .navlink {
     background-color: #1387B9;
     color: black;
     padding: 24px;
+    font-family: serif;
     font-size: 24px;
     border-radius: 24px;
     border: none;
 }
+
 .navbar a{
     color: black;
+    font-family: serif;
 }
+
 .deletebtn {
     background-color: #1387B9;
     color: black;
@@ -52,6 +63,7 @@ input[type=submit] { align-self: start; min-width: 10em; }
 .dropbtn {
     background-color: #4CAF50;
     color: white;
+    display:inline;
     padding: 16px;
     font-size: 16px;
     border-radius: 16px;
@@ -61,7 +73,7 @@ input[type=submit] { align-self: start; min-width: 10em; }
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
     position: relative;
-    display: inline-block;
+    display: inline;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -79,14 +91,13 @@ input[type=submit] { align-self: start; min-width: 10em; }
     color: black;
     padding: 12px 16px;
     text-decoration: none;
-    display: block;
 }
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd;}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {display: inline;}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
