@@ -1,5 +1,5 @@
 from flask import (
-    Flask, request, render_template, redirect, url_for, send_file, flash
+    Flask, request, render_template, redirect, url_for, send_file, flash, Markup
 )
 import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
-from models import Result
+#from models import Result
 
 @app.route('/', methods=('GET', "POST"))
 def index():
@@ -118,6 +118,14 @@ def delete():
         ' FROM formulas f'
     ).fetchall()
     return render_template('delete.html', formulas=formulas)
+
+@app.route('/analytics')
+def analytics():
+    sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
+    values = pull_from_sheet.sales_analytics(sheet_id)
+    print(values)
+    labels = ["January","February","March","April","May","June","July","August","September","October","November","December","Whole Year"]
+    return render_template('analytics.html', values=values, labels=labels)
 
 if __name__ == '__main__':
     app.run()

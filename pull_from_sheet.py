@@ -3,6 +3,7 @@ from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from googleapiclient.errors import HttpError
+import re
 
 def get_tabs(sheet_id):
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -22,6 +23,53 @@ def get_tabs(sheet_id):
         title = sheet.get("properties", {}).get("title", "Sheet1")
         tabs.append(title)
     return tabs
+
+def sales_analytics(sheet_id):
+    def get_total_revenue():
+        RANGE_NAME = 'Total!C19:O19'
+        result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
+                                                 range=RANGE_NAME).execute()
+        values = result.get("values")[0]
+        return values
+
+    def toInt(revenue_strings):
+        int_list = list()
+        print("Rev_String: " + str(revenue_strings))
+        for s in revenue_strings:
+            # print(s[3:-1])
+            # int_list.append(int(s[3:-1]))
+            num = ''
+            for char in s:
+                if char == ".":
+                    break
+                else:
+                    try:
+                        int(char)
+                        num = num + char
+                    except ValueError:
+                        print("Value Error")
+
+            int_list.append(int(num))
+        print("Int List: " + str(int_list))
+        return int_list
+
+    SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+    store = file.Storage('static/credentials.json')
+    creds = store.get()
+    if not creds or creds.invalid:
+        flow = client.flow_from_clientsecrets('static/client_secret.json', SCOPES)
+        creds = tools.run_flow(flow, store)
+    service = build('sheets', 'v4', http=creds.authorize(Http()))
+    # Call the Sheets API
+    SPREADSHEET_ID = sheet_id
+    values = get_total_revenue()
+    print("Values" + str(values))
+    return toInt(values)
+
+
+
+
+
 
 def pull_from_sheet(sheet_id, tab_name):
     '''
