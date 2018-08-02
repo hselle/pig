@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 
-{% block header %}Analytics Tool{% endblock %}
+{% block header %}Analytics Tool - Promotions (work in progress){% endblock %}
 
 {% block content %}
 <div class="navbar">
-  <a href="{{ url_for('promotions')}}"><input type="button" value="Promotions" class="navlink"></a>
+  <a href="{{ url_for('analytics')}}"><input type="button" value="Analytics Home" class="navlink"></a>
 </div>
 <html lang="en">
 <head>
    <meta charset="utf-8" />
-   <title>ANalytics Tool</title>
+   <title>Analytics Tool</title>
 
    <!-- import plugin script -->
    <script src='/static/Chart.min.js'></script>
@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<h1>Projected Annual Revenue</h1>
+<h1>Revenue/Promotion Spending</h1>
 
 <!-- bar chart canvas element -->
 <canvas id="chart" width="900" height="600"></canvas>
@@ -71,7 +71,7 @@
    // get bar chart canvas
    var mychart = document.getElementById("chart").getContext("2d");
 
-   steps = 10
+   steps = 1
    max = {{boundary}}
    // draw bar chart
    var LineChartDemo = new Chart(mychart).Line(barData, {

@@ -24,34 +24,7 @@ def get_tabs(sheet_id):
         tabs.append(title)
     return tabs
 
-def sales_analytics(sheet_id):
-    def get_total_revenue():
-        RANGE_NAME = 'Total!C19:O19'
-        result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
-                                                 range=RANGE_NAME).execute()
-        values = result.get("values")[0]
-        return values
-
-    def toInt(revenue_strings):
-        int_list = list()
-        print("Rev_String: " + str(revenue_strings))
-        for s in revenue_strings:
-            # print(s[3:-1])
-            # int_list.append(int(s[3:-1]))
-            num = ''
-            for char in s:
-                if char == ".":
-                    break
-                else:
-                    try:
-                        int(char)
-                        num = num + char
-                    except ValueError:
-                        print("Value Error")
-
-            int_list.append(int(num))
-        print("Int List: " + str(int_list))
-        return int_list
+def pull_row(sheet_id, range):
 
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
     store = file.Storage('static/credentials.json')
@@ -62,11 +35,36 @@ def sales_analytics(sheet_id):
     service = build('sheets', 'v4', http=creds.authorize(Http()))
     # Call the Sheets API
     SPREADSHEET_ID = sheet_id
-    values = get_total_revenue()
-    print("Values" + str(values))
+    RANGE_NAME = range
+    result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
+                                             range=RANGE_NAME).execute()
+    values = result.get("values")[0]
+    return values
+
+def sales_analytics(sheet_id, range):
+
+    def toInt(revenue_strings):
+        int_list = list()
+        print("Rev_String: " + str(revenue_strings))
+        for s in revenue_strings:
+            num = ''
+            for char in s:
+                if char == ".":
+                    break
+                else:
+                    try:
+                        int(char)
+                        num = num + char
+                    except ValueError:
+                        #r=1
+                        print("Value Error")
+
+            int_list.append(int(num))
+        print("Int List: " + str(int_list))
+        return int_list
+
+    values = pull_row(sheet_id, range)
     return toInt(values)
-
-
 
 
 
