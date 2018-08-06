@@ -123,25 +123,75 @@ def delete():
 def analytics():
     sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
     sheet_range = 'Total!C19:N19'
-    revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range)
+    revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
     sheet_range = 'Total!C21:N21'
-    promos = pull_from_sheet.sales_analytics(sheet_id, sheet_range)
+    promos = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
     labels = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     boundary = max(revenue)
-    return render_template('analytics.html', revenue=revenue, promos=promos, labels=labels, boundary=boundary)
+    return render_template('analytics.html',
+        revenue=revenue,
+        promos=promos,
+        labels=labels,
+        boundary=boundary)
+
+@app.route('/analytics/pie')
+def pie():
+    month_2_num = {
+        "January":0,
+        "February":1,
+        "March":2,
+        "April":3,
+        "May":4,
+        "June":5,
+        "July":6,
+        "August":7,
+        "September":8,
+        "October":9,
+        "November":10,
+        "December":11
+    }
+    month_name = request.args.get('month')
+    if month_name != None:
+        sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
+        sheet_range = 'Total!C10:N18'
+        units_sold = pull_from_sheet.sales_analytics(sheet_id, sheet_range, True)
+        labels = ["125", "127", "129", "220", "221", "222", "225", "207", "209"]
+
+        units_by_month = list()
+        for month_of_data in units_sold:
+            units_by_month.append(month_of_data[month_2_num[month_name]])
+        return render_template('pie.html',
+            promos=units_by_month,
+            labels=labels,
+            month_name=month_name
+        )
+    else:
+        sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
+        sheet_range = 'Total!O10:O18'
+        units_sold = pull_from_sheet.sales_analytics(sheet_id, sheet_range, True)
+        labels = ["125", "127", "129", "220", "221", "222", "225", "207", "209"]
+        month_name = request.args.get('month')
+        units_by_month = list()
+        for data in units_sold:
+            units_by_month.append(data)
+        return render_template('pie.html',
+            promos=units_by_month,
+            labels=labels,
+            month_name="2018"
+        )
 
 @app.route('/analytics/promotions')
 def promotions():
     sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
 
     sheet_range = 'Total!O19'
-    annual_revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range)
+    annual_revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
 
     sheet_range = 'Total!C19:N19'
-    revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range)
+    revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
 
     sheet_range = 'Total!C21:N21'
-    promos = pull_from_sheet.sales_analytics(sheet_id, sheet_range)
+    promos = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
 
     average_revenue_per_month = (annual_revenue[0]/12)
     sales_by_dollar_promotion = list()

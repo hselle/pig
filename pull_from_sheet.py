@@ -24,7 +24,7 @@ def get_tabs(sheet_id):
         tabs.append(title)
     return tabs
 
-def pull_row(sheet_id, range):
+def _pull(sheet_id, range):
 
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
     store = file.Storage('static/credentials.json')
@@ -39,13 +39,30 @@ def pull_row(sheet_id, range):
     result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                              range=RANGE_NAME).execute()
     values = result.get("values")[0]
+
     return values
 
-def sales_analytics(sheet_id, range):
+def _pull_2d(sheet_id, range):
+
+    SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+    store = file.Storage('static/credentials.json')
+    creds = store.get()
+    if not creds or creds.invalid:
+        flow = client.flow_from_clientsecrets('static/client_secret.json', SCOPES)
+        creds = tools.run_flow(flow, store)
+    service = build('sheets', 'v4', http=creds.authorize(Http()))
+    # Call the Sheets API
+    SPREADSHEET_ID = sheet_id
+    RANGE_NAME = range
+    result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
+                                             range=RANGE_NAME).execute()
+    values = result.get("values")
+    return values
+
+def sales_analytics(sheet_id, range, is2D):
 
     def toInt(revenue_strings):
         int_list = list()
-        print("Rev_String: " + str(revenue_strings))
         for s in revenue_strings:
             num = ''
             for char in s:
@@ -53,21 +70,40 @@ def sales_analytics(sheet_id, range):
                     break
                 else:
                     try:
-                        int(char)
-                        num = num + char
+                        num = num + str(int(char))
                     except ValueError:
-                        #r=1
-                        print("Value Error")
+                        pass
 
             int_list.append(int(num))
-        print("Int List: " + str(int_list))
         return int_list
 
-    values = pull_row(sheet_id, range)
-    return toInt(values)
+    def toInt_2d(revenue_strings):
+        month_list = list()
+        for month in revenue_strings:
+            int_list = list()
+            for promo in month:
+                num = ''
+                for char in promo:
+                    if char == ".":
+                        break
+                    else:
+                        try:
+                            num = num + str(int(char))
+                        except ValueError:
+                            pass
+                if num == '':
+                    int_list.append(0)
+                else:
+                    int_list.append(int(num))
+            month_list.append(int_list)
+        return month_list
 
-
-
+    if is2D:
+        values = _pull_2d(sheet_id, range)
+        return toInt_2d(values)
+    else:
+        values = _pull(sheet_id, range)
+        return toInt(values)
 
 def pull_from_sheet(sheet_id, tab_name):
     '''
@@ -90,7 +126,7 @@ def pull_from_sheet(sheet_id, tab_name):
         Pulls from the table and catagorizes the data in dictrionaries
         '''
         RANGE_NAME = tab_name + '!F15:T15'
-        print(RANGE_NAME)
+
         result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                  range=RANGE_NAME).execute()
         values = result.get("values")[0]
@@ -99,7 +135,7 @@ def pull_from_sheet(sheet_id, tab_name):
             'calories' : values[0],
             'calories_from_fat' : values[1]
         }
-        print(str(calories_dict))
+
 
         nutrient_dict = {
             'sugar' : float(values[2]),

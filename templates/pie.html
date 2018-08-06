@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block header %}Analytics Tool - Pie Charts{% endblock %}
+
+{% block content %}
+<div class="navbar">
+  <a href="{{ url_for('analytics')}}"><input type="button" value="Analytics Home" class="navlink"></a>
+</div>
+<div class="month_nav">
+  <a href="{{ url_for('pie')}}?month=January"><input type="button" value="January" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=February"><input type="button" value="February" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=March"><input type="button" value="March" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=April"><input type="button" value="April" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=May"><input type="button" value="May" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=June"><input type="button" value="June" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=July"><input type="button" value="July" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=August"><input type="button" value="August" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=September"><input type="button" value="September" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=October"><input type="button" value="October" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=November"><input type="button" value="November" class="navlink"></a>
+  <a href="{{ url_for('pie')}}?month=December"><input type="button" value="December" class="navlink"></a>
+</div>
+<html lang="en">
+<head>
+   <meta charset="utf-8" />
+   <title>Analytics Tool</title>
+
+   <!-- import plugin script -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+
+<h1>Units Sold By Product - {{ month_name }}</h1>
+
+<!-- bar chart canvas element -->
+<canvas id="chart" width="800" height="450"></canvas>
+
+<script>
+  var ctx = document.getElementById("chart");
+  var PieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels : [
+          {% for item in labels %}
+            "{{ item }}",
+          {% endfor %}
+        ],
+
+        datasets : [{
+          label: "I dont know whats going on",
+          backgroundColor: [
+            "#3e95cd",
+
+            "#8e5ea2",
+
+            "#3cba9f",
+
+            "#e8c3b9",
+
+            "#c45850",
+
+            "#3365cd",
+
+            "#695ea2",
+
+            "#3f4628",
+
+            "#ef12f4",
+
+            "#f4d850",
+
+            "#ffffff",
+
+            "#eeeeee",
+
+            "#334525",
+          ],
+          data: [
+            {% for item in promos %}
+              {{item}},
+            {% endfor %}
+          ]
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "{{month_name}}"
+        }
+      }
+  });
+
+</script>
+
+</body>
+{% endblock %}
+</html>

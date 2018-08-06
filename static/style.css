@@ -1,5 +1,5 @@
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
-body { max-width: 960px; margin: 0 auto; background: white; }
+body { max-width: 1060px; margin: 0 auto; background: white; }
 h1 { font-family: serif; color: #377ba8; margin: 1rem 0; }
 a { color: #377ba8; }
 hr { border: none; border-top: 1px solid lightgray; }
@@ -39,6 +39,21 @@ input[type=submit] { align-self: start; min-width: 10em; color: #079C00; border-
 }
 
 .navbar a{
+    color: black;
+    font-family: serif;
+}
+
+.month_nav .navlink {
+    background-color: #1387B9;
+    color: black;
+    padding: 12px;
+    font-family: serif;
+    font-size: 12px;
+    border-radius: 12px;
+    border: none;
+}
+
+.month_nav a{
     color: black;
     font-family: serif;
 }
