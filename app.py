@@ -180,27 +180,27 @@ def pie():
             month_name="2018"
         )
 
-@app.route('/analytics/promotions')
-def promotions():
-    sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
-
-    sheet_range = 'Total!O19'
-    annual_revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
-
-    sheet_range = 'Total!C19:N19'
-    revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
-
-    sheet_range = 'Total!C21:N21'
-    promos = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
-
-    average_revenue_per_month = (annual_revenue[0]/12)
-    sales_by_dollar_promotion = list()
-    for i in range(1,12):
-        revenue_growth = revenue[i] - revenue[i-1]
-        sales_by_dollar_promotion.append(revenue_growth/promos[i])
-    boundary = max(sales_by_dollar_promotion)
-    labels = ["February","March","April","May","June","July","August","September","October","November","December"]
-    return render_template('analytics-promotions.html', revenue=sales_by_dollar_promotion, labels=labels, boundary=boundary)
+# @app.route('/analytics/promotions')
+# def promotions():
+#     sheet_id = '1M0pO_RyVcF-4OnghydE-sYARZT_Wwrzvn0MhZrnSpiQ'
+#
+#     sheet_range = 'Total!O19'
+#     annual_revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
+#
+#     sheet_range = 'Total!C19:N19'
+#     revenue = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
+#
+#     sheet_range = 'Total!C21:N21'
+#     promos = pull_from_sheet.sales_analytics(sheet_id, sheet_range, False)
+#
+#     average_revenue_per_month = (annual_revenue[0]/12)
+#     sales_by_dollar_promotion = list()
+#     for i in range(1,12):
+#         revenue_growth = revenue[i] - revenue[i-1]
+#         sales_by_dollar_promotion.append(revenue_growth/promos[i])
+#     boundary = max(sales_by_dollar_promotion)
+#     labels = ["February","March","April","May","June","July","August","September","October","November","December"]
+#     return render_template('analytics-promotions.html', revenue=sales_by_dollar_promotion, labels=labels, boundary=boundary)
 
 
 

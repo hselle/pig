@@ -46,6 +46,15 @@ def get_months(sheet_size):
             master[2][index],
             master[3][index]
         ]
+
+    def group_index2(index, master):
+        return [
+            master[index][0],
+            master[index][1],
+            master[index][2],
+            master[index][3]
+        ]
+
     def parse_months(month, master):
         parsed = list()
         for i in range(sheet_size-1):
@@ -53,13 +62,38 @@ def get_months(sheet_size):
                 parsed.append(group_index(i, master))
         return parsed
 
-    def parse_skus(master):
-        sku_dict = {}
+    def parse_channel(channel, master):
+        parsed = list()
+        #print("ABout to parse Chalnnel: " + str(master))
+        for i in range(len(master)-1):
+            if master[i][0] == channel:
+                parsed.append(group_index2(i, master))
+        return parsed
 
+    def get_channels(master):
+        channel_list = list()
+        for i in range(len(master)-1):
+            if master[i][0] not in channel_list:
+                channel_list.append(master[i][0])
+        return channel_list
+
+    def get_sku_channel_dict(master):
+        sku_dict = {}
+        for channel in master:
+            for entry in channel:
+                sku_dict[entry[1] + " - " + entry[0]] = '0'
+        for channel in master:
+            for entry in channel:
+                sku_dict[entry[1] + " - " + entry[0]] = int(sku_dict[entry[1] + " - " + entry[0]]) + int(entry[3])
+        return sku_dict
+
+    def get_sku_dict(master):
+        sku_dict = {}
         for entry in master:
             sku_dict[entry[1]] = '0'
         for entry in master:
             sku_dict[entry[1]] = int(sku_dict[entry[1]]) + int(entry[3])
+
         return sku_dict
 
     def average_skus(master):
@@ -74,37 +108,40 @@ def get_months(sheet_size):
             master_dict[key] = master_dict[key]/3
         return master_dict
 
+    def pull_month(month_name, master):
+        month = parse_months(month_name, master)
+        return_ = list()
+        for channel in get_channels(month):
+            return_.append(parse_channel(channel, month))
+        return get_sku_channel_dict(return_)
 
-
-    jan = parse_skus(parse_months("January", master))
-    feb = parse_skus(parse_months("February", master))
-    mar = parse_skus(parse_months("March", master))
-    print(average_skus((jan, feb, mar)))
-
-
-    apr = parse_skus(parse_months("April", master))
-    may = parse_skus(parse_months("May", master))
-    jun = parse_skus(parse_months("June", master))
-
-    print(average_skus((apr, may, jun)))
-
-    # channel_skus = list()
-    # for i in range(sheet_size-1):
-    #     channel_skus.append(channels[i] + " - " + skus[i] + " - " + month[i])
-
-    # channel_sku_dict = {}
-    # for i in range(sheet_size-1):
-    #     channel_sku_dict[channel_skus[i]] = 0
-    # for i in range(sheet_size-1):
-    #     channel_sku_dict[channel_skus[i]] = channel_sku_dict[channel_skus[i]] + int(cases[i])
-    #
-    # return channel_sku_dict
+    q1 = average_skus((pull_month("January", master), pull_month("February", master), pull_month("March", master)))
+    q2 = average_skus((pull_month("April", master), pull_month("May", master), pull_month("June", master)))
+    return (q1, q2)
 
 averages = get_months(43908)
 
 
 print(averages)
 
+# skus = list(map(str, averages[0].keys()))
+#
+# trace1 = go.Bar(
+#             x=averages,
+#             y=list(averages[0].values())
+# )
+# trace2 = go.Bar(
+#             x=averages,
+#             y=list(averages[1].values())
+# )
+#
+# data = [trace1, trace2]
+# layout = go.Layout(
+#     barmode='group'
+# )
+#
+# fig = go.Figure(data=data, layout=layout)
+# py.plot(fig, filename='grouped-bar')
 # channels = list(cases_per_channel.keys())
 # cases = list(cases_per_channel.values())
 # data = [go.Bar(

@@ -5,7 +5,6 @@
 
 {% block content %}
 <div class="navbar">
-  <a href="{{ url_for('promotions')}}"><input type="button" value="Promotions" class="navlink"></a>
   <a href="{{ url_for('pie')}}"><input type="button" value="Fun Pie Charts" class="navlink"></a>
 </div>
 <html lang="en">
@@ -79,6 +78,14 @@
    max = {{boundary}}
    // draw bar chart
    var options = {
+        legend: {
+            display: true,
+            position: 'right',
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        },
+
         scales: {
                   yAxes: [{
                       ticks: {
