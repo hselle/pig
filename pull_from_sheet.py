@@ -6,6 +6,9 @@ from googleapiclient.errors import HttpError
 import re
 
 def get_tabs(sheet_id):
+    '''
+    Retrieves and returns all tab names from a google sheet with a given sheet Id
+    '''
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
     store = file.Storage('static/credentials.json')
     creds = store.get()
@@ -24,8 +27,12 @@ def get_tabs(sheet_id):
         tabs.append(title)
     return tabs
 
-def _pull(sheet_id, range):
-
+def _pull_row(sheet_id, range):
+    '''
+    Helper method that pulls from a given sheet a given range of cells.
+    Hack: Google API returns a 2d array: [rows][columns]. Hence, this function
+    only returns the [0]th row.
+    '''
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
     store = file.Storage('static/credentials.json')
     creds = store.get()
@@ -43,7 +50,10 @@ def _pull(sheet_id, range):
     return values
 
 def _pull_2d(sheet_id, range):
-
+    '''
+    Helper method that pulls from a given sheet a given range of cells as a 2d
+    array: [rows][columns]
+    '''
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
     store = file.Storage('static/credentials.json')
     creds = store.get()
@@ -60,8 +70,15 @@ def _pull_2d(sheet_id, range):
     return values
 
 def sales_analytics(sheet_id, range, is2D):
-
+    '''
+    Organizes sales data stored in string lists into integer lists.
+    '''
     def toInt(revenue_strings):
+        '''
+        This function takes a dirty list of strings and cleans itto be an
+        int list. It throws out blank cells and destroys periods, commas and any
+        other non-numeric character.
+        '''
         int_list = list()
         for s in revenue_strings:
             num = ''
@@ -78,6 +95,9 @@ def sales_analytics(sheet_id, range, is2D):
         return int_list
 
     def toInt_2d(revenue_strings):
+        '''
+        A version for a list with 2 dimensions. See above function
+        '''
         month_list = list()
         for month in revenue_strings:
             int_list = list()
@@ -102,7 +122,7 @@ def sales_analytics(sheet_id, range, is2D):
         values = _pull_2d(sheet_id, range)
         return toInt_2d(values)
     else:
-        values = _pull(sheet_id, range)
+        values = _pull_row(sheet_id, range)
         return toInt(values)
 
 def pull_from_sheet(sheet_id, tab_name):
