@@ -43,7 +43,7 @@ pytest==3.6.2
 python-dateutil==2.7.3
 python-editor==1.0.3
 requests==2.18.4
-rsa==3.4.2
+rsa==4.1
 ruamel-yaml==0.15.37
 six==1.11.0
 SQLAlchemy==1.2.9
